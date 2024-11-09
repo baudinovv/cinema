@@ -7,11 +7,7 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx,vue}",
   ],
   theme: {
-    extend: {
-      width: {
-        '.5/10': "5%"
-      }
-    },
+    extend: {},
   },
   plugins: [],
 }
