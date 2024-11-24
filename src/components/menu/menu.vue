@@ -14,7 +14,7 @@ export default{
 
 </script>
 <template>
-  <aside class="bg-black w-[5%] h-lvh flex flex-col items-center justify-center fixed transition">
+  <aside class="bg-black w-[5%] h-lvh flex flex-col items-center justify-center fixed transition border-r-[1px] border-gray-800">
     <a href="" class="mt-12 w-full">
       <homeIcon class="size-[60%] text-[#ffffff] hover:text-[#2cff8b] transition" />
     </a>
