@@ -3,7 +3,10 @@ import headerStars from './star.vue'
 export default{
   name: "rating",
   props: {
-    starRating: Number
+    starRating: {
+      type: Number,
+      default: 5
+    }
   },
   components:{
     headerStars
@@ -17,7 +20,7 @@ export default{
 
   methods : {
     getStars(){
-      if (this.starRating){
+      if(this.starRating){
         for(let i = 0; i < Number((this.starRating).toPrecision(2)[0]); i++){
           this.starsArr.push('full');
         }
