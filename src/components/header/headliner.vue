@@ -23,7 +23,7 @@ export default{
     <div class="absolute z-10 w-full h-full bg-gradient-to-r from-black via-black via-20% top-0 left-0 "></div>
     <div class="px-[80px] relative z-20 flex flex-col gap-3 justify-between">
       <h1 class="text-4xl">{{ headerTitle }}</h1>
-      <ol class="flex justify-between list-disc max-w-[430px] text-gray-400">
+      <ol class="flex list-disc gap-6 text-gray-400">
         <li class="flex"> <slot></slot> </li>
         <li class="">{{ headerReviews }}</li>
         <li class="">{{ headerYear }}</li>
