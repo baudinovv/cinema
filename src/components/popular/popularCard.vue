@@ -20,7 +20,7 @@ export default{
 
 </script>
 <template>
-  <div class="h-full w-full max-w-60 cursor-pointer">
+  <div class="transition h-full max-w-60 cursor-pointer hover:scale-105">
     <img :src="moviesLink + cardImage" alt="#" class="border-4 border-neutral-800 min-w-[230px]">
     <div class="mt-2 text-xl"> {{ cardTitle }}</div>
     <cRating :star-rating="cardRating" class="w-[80px] text-sm items-center" />

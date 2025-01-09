@@ -8,9 +8,9 @@ export default{
 
 </script>
 <template>
-  <div class="mt-16 w-[95%] justify-self-end ml-[5%] h-full">
-    <div class="text-2xl">{{ popularTitle }}</div>
-    <div class="flex gap-4 h-full overflow-x-auto mt-12">  
+  <div class="mt-16 w-full justify-self-end h-full">
+    <div class="text-2xl pl-12">{{ popularTitle }}</div>
+    <div class="flex gap-4 pl-12 h-full overflow-x-auto pt-12">  
       <slot></slot>
     </div>
   </div>

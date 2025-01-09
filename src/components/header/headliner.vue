@@ -1,6 +1,6 @@
 <script lang="ts">
 export default{
-  name: "header",
+  name: "c-header",
   props: {
     headerTitle: String,
     headerReviews: String,

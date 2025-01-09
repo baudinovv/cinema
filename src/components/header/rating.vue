@@ -46,6 +46,6 @@ export default{
         :key="index" 
       />
     </div>
-    <div class="">{{ starRating }}</div>
+    <div class="">{{ starRating * 2 }}</div>
   </div>
 </template>
