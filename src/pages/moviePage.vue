@@ -5,7 +5,7 @@ import cRating from '../components/header/rating.vue'
 import cDetails from '../components/details/detailsMenu.vue'
 
 import MovieDetails from '../interfaces/MovieDetails.ts';
-import { useMovieDetails } from '../store/store.ts';
+import { useStoreDetails } from '../store/details.ts';
 
 export default {
   components : {
@@ -18,7 +18,7 @@ export default {
       headliner: null as MovieDetails | null,
       apiKey: import.meta.env.VITE_APP_API_KEY,
       language: "ru-RU" as string,
-      details: useMovieDetails()
+      store: useStoreDetails()
     };
   },
   methods: {
@@ -37,37 +37,33 @@ export default {
       let result = responseMovie.json();
       result.then((res: any) => {
         this.headliner = res;
+        console.log(res); //чdebug
+        this.store.setDetails(res); // set into pinia's store
       }).catch((err: Error) => console.error(err));
     },
 
     fetchRating(arg: number) : number {
       return Number((arg / 2).toPrecision(2));
-    },  
-    
-    setMovieDetailsStore(){
-      if(this.headliner) this.details.setDetails(this.headliner);
     }
-    
   },
   
   mounted() {
     this.getHeadliner();
-    this.setMovieDetailsStore();
   },
 };
 
 </script>
 <template>
-  <cHeader v-if="headliner" 
+  <cHeader v-if="headliner"
     :header-title="headliner.title"
     :header-reviews="(headliner.vote_count > 1000) ? `${headliner.vote_count / 1000}`.substring(0, 3) + 'K рецензий' : `${headliner.vote_count} рецензий`"
     :header-year="headliner.release_date.substring(0, 4)" header-duration="2ч 8м"
     :header-img="headliner.backdrop_path" :header-desc="headliner.overview">
-    <cRating :star-rating="fetchRating(headliner.vote_average)" />
+
+    <cRating 
+      :star-rating="fetchRating(headliner.vote_average)" 
+    />
   </cHeader>
-  <cDetails 
-    :movie-id="headliner?.id"
-  />
-    
-  <RouterView></RouterView>
+  <cDetails />
+  <RouterView />
 </template>

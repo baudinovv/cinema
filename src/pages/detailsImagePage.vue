@@ -1,4 +1,4 @@
-a<script lang="ts">
+<script lang="ts">
 
 export default {
   

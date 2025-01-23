@@ -8,7 +8,7 @@ export default interface MovieDetails {
     backdrop_path: string;
   };
   budget: number;
-  genre: {
+  genres: {
     id: number;
     name: string;
   }[];
