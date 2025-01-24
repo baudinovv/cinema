@@ -51,6 +51,7 @@ export default defineComponent({
       result.then((res: any) => {
         this.headliner = res.results[0];
         this.popularMovies = res.results;
+        console.log(res)
       }).catch((err: Error) => console.error(err));
     },
 
@@ -69,12 +70,7 @@ export default defineComponent({
       result.then((res: any) => {
         this.popularTV = res.results;
       }).catch((err: Error) => console.error(err));
-    },
-
-    fetchRating(arg: number): number {
-      return Number((arg / 2).toPrecision(2));
     }
-   
   },
   
   computed: {
@@ -93,20 +89,20 @@ export default defineComponent({
     :header-reviews="(headliner.vote_count > 1000) ? `${headliner.vote_count / 1000}`.substring(0, 3) + 'K рецензий' : `${headliner.vote_count}`"
     :header-year="headliner.release_date.substring(0, 4)" header-duration="2ч 8м"
     :header-img="headliner.backdrop_path" :header-desc="headliner.overview">
-    <cRating :star-rating="fetchRating(headliner.vote_average)" />
+    <cRating :star-rating="headliner.vote_average" />
   </cHeader>
   <cPopular v-if="popularMovies" popular-title="Популярные фильмы">
     <cCard v-for="item in popularMovies"
       @click="$router.push(`/movie/${item.id}/overview`)" 
       :key="item.id" 
-      :card-rating="fetchRating(item.vote_average)"
-      :card-image="item.backdrop_path" 
+      :card-rating="item.vote_average"
+      :card-image="item.poster_path" 
       :card-title="item.title" />
   </cPopular>
   <cPopular v-if="popularTV" popular-title="Популярные сериалы">
     <cCard v-for="item in popularTV" 
       :key="item.id" 
-      :card-rating="fetchRating(item.vote_average)"
+      :card-rating="item.vote_average"
       :card-image="item.poster_path" 
       :card-title="item.name" />
   </cPopular>

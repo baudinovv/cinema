@@ -41,10 +41,6 @@ export default {
         this.store.setDetails(res); // set into pinia's store
       }).catch((err: Error) => console.error(err));
     },
-
-    fetchRating(arg: number) : number {
-      return Number((arg / 2).toPrecision(2));
-    }
   },
   
   mounted() {
@@ -61,7 +57,7 @@ export default {
     :header-img="headliner.backdrop_path" :header-desc="headliner.overview">
 
     <cRating 
-      :star-rating="fetchRating(headliner.vote_average)" 
+      :star-rating="Number(headliner.vote_average.toPrecision(2))" 
     />
   </cHeader>
   <cDetails />

@@ -21,10 +21,10 @@ export default{
   methods : {
     getStars(){
       if(this.starRating){
-        for(let i = 0; i < Number((this.starRating).toPrecision(2)[0]); i++){
+        for(let i = 0; i < Number((this.starRating/2).toPrecision(2)[0]); i++){
           this.starsArr.push('full');
         }
-        (this.starRating) ? (Number(this.starRating.toPrecision(2)) * 10 % 10 != 0) ? this.starsArr.push('half') : 0 : 0;
+        (this.starRating/2) ? (Number((this.starRating / 2).toPrecision(2)) * 10 % 10 != 0) ? this.starsArr.push('half') : 0 : 0;
         for(let i = this.starsArr.length; i < 5; i++){
           this.starsArr.push('empty');
         }
@@ -46,6 +46,6 @@ export default{
         :key="index" 
       />
     </div>
-    <div class="">{{ starRating * 2 }}</div>
+    <div class="">{{ starRating / 2}}</div>
   </div>
 </template>

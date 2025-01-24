@@ -23,7 +23,7 @@ export default{
   <div class="transition h-full max-w-60 cursor-pointer hover:scale-105">
     <img :src="moviesLink + cardImage" alt="#" class="border-4 border-neutral-800 min-w-[230px]">
     <div class="mt-2 text-xl"> {{ cardTitle }}</div>
-    <cRating :star-rating="cardRating" class="w-[80px] text-sm items-center" />
+    <cRating v-if="cardRating" :star-rating="cardRating" class="w-[80px] text-sm items-center" />
   </div>
 </template>
 

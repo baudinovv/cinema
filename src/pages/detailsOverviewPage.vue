@@ -3,8 +3,15 @@
 import { useStoreDetails } from '../store/details.ts';
 
 import Credits from '../interfaces/Credits.ts';
+import cPopular from '../components/popular/popularSection.vue';
+import cCard from '../components/popular/popularCard.vue'
+import Recommendations from '../interfaces/Recommendations.ts';
 
 export default {
+  components: {
+    cPopular,
+    cCard
+  },
   data() {
     return {
       imageLink: "https://movies-proxy.vercel.app/ipx/f_webp&s_400x600/tmdb/",
@@ -28,6 +35,7 @@ export default {
       let result = responseMovie.json();
       result.then((res: Credits) => {
         this.store.setCredits(res);
+        console.log(res);
         for(let item of res.crew){
           if(item.job == "Director"){
             this.store.setDirector(item.name);
@@ -43,6 +51,24 @@ export default {
         },100);
       }).catch((err: Error) => console.error(err));
     },
+    async getRecommendations() {
+      const url =
+      `https://api.themoviedb.org/3/movie/${this.$route.params.id}/recommendations?language=${this.store.$state.language}&page=1`;
+      const options = {
+        method: "GET",
+        headers: {
+          accept: "application/json",
+          Authorization:
+          "Bearer " + this.apiKey,
+        },
+      };
+      let responseMovie = await fetch(url, options);
+      let result = responseMovie.json();
+      result.then((res: Recommendations) => {
+        this.store.setRecommendations(res);
+        console.log(res);
+      }).catch((err: Error) => console.error(err));
+    },
     
     parseRuntime(arg: number){
       return arg > 60 ? `${Math.floor(arg/60)}ч ${arg - (Math.floor(arg/60) * 60)}м` : '' 
@@ -53,6 +79,9 @@ export default {
   mounted(){
     if(Object.keys(this.store.$state.credits).length == 0 ||  Number(this.$route.params.id) !==  Number(this.store.credits.id) || this.store.$state.prodCompanies.length == 0){
       this.getCredits()
+    }
+    if(Object.keys(this.store.$state.recommendations).length == 0 ||  Number(this.$route.params.id) !==  Number(this.store.credits.id)){
+      this.getRecommendations()
     } 
   }
 
@@ -67,13 +96,13 @@ export default {
       <div class="mt-6 text-base">
         {{ store.$state.details?.overview }}
       </div>
-      <div class="mt-6 grid grid-cols-2 gap-6 max-w-[85%] justify-between	">
+      <div class="mt-6 grid grid-cols-2 gap-6 max-w-[85%] justify-between">
         <div class="grid grid-cols-2 items-center">
           <div class="pt-3 text-sm">Дата выхода</div>
           <div class="pt-3 text-sm">{{ store.$state.details?.release_date }}</div>
           <div class="pt-3 text-sm">Режиссёр</div>
           <div class="pt-3 text-xs flex gap-3">
-            <div class="px-2 py-2 bg-gray-600 rounded-lg box-content">
+            <div class="px-2 py-2 bg-neutral-700 rounded-lg box-content">
               {{ store.$state.director }}
             </div>
           </div>
@@ -103,7 +132,7 @@ export default {
           <div class="mt-3 text-xs flex gap-3 flex-wrap">
             <div 
               v-for="item in store.$state.details.genres"
-              class="px-1 py-1 bg-gray-600 rounded-lg box-content "
+              class="px-2 py-1 bg-neutral-700 rounded-lg box-content "
             >
               {{ item.name }}
             </div>
@@ -118,4 +147,16 @@ export default {
       </div>
     </div>
   </div>
+  <cPopular popular-title="Актерский состав">
+    <cCard v-for="item in store.$state.credits.cast" 
+      :card-rating="0"
+      :card-image="item.profile_path?.toString()" 
+      :card-title="item.name?.toString()" />
+  </cPopular>
+  <cPopular popular-title="Похожие">
+    <cCard v-for="item in store.$state.recommendations.results" 
+      :card-rating="Number(item.vote_average.toPrecision(2))"
+      :card-image="item.poster_path?.toString()" 
+      :card-title="item.title?.toString()" />
+  </cPopular>
 </template>
