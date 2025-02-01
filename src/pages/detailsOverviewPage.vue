@@ -5,7 +5,6 @@ import { useStoreDetails } from '../store/details.ts';
 import Credits from '../interfaces/Credits.ts';
 import cPopular from '../components/popular/popularSection.vue';
 import cCard from '../components/popular/popularCard.vue'
-import Recommendations from '../interfaces/Recommendations.ts';
 
 export default {
   components: {
@@ -20,83 +19,24 @@ export default {
     }
   },
   methods: {
-    async getCredits() {
-      const url =
-      `https://api.themoviedb.org/3/movie/${this.$route.params.id}/credits?language=${this.store.$state.language}`;
-      const options = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization:
-          "Bearer " + this.apiKey,
-        },
-      };
-      let responseMovie = await fetch(url, options);
-      let result = responseMovie.json();
-      result.then((res: Credits) => {
-        this.store.setCredits(res);
-        console.log(res);
-        for(let item of res.crew){
-          if(item.job == "Director"){
-            this.store.setDirector(item.name);
-          }
-        }
-        setTimeout(() => {
-          if(this.store.$state.details.production_companies){
-            this.store.setProdCompanies([]);
-            for(let item of this.store.$state.details.production_companies){
-              this.store.$state.prodCompanies.push(item.name);
-            }
-          } 
-        },100);
-      }).catch((err: Error) => console.error(err));
-    },
-    async getRecommendations() {
-      const url =
-      `https://api.themoviedb.org/3/movie/${this.$route.params.id}/recommendations?language=${this.store.$state.language}&page=1`;
-      const options = {
-        method: "GET",
-        headers: {
-          accept: "application/json",
-          Authorization:
-          "Bearer " + this.apiKey,
-        },
-      };
-      let responseMovie = await fetch(url, options);
-      let result = responseMovie.json();
-      result.then((res: Recommendations) => {
-        this.store.setRecommendations(res);
-        console.log(res);
-      }).catch((err: Error) => console.error(err));
-    },
-    
     parseRuntime(arg: number){
-      return arg > 60 ? `${Math.floor(arg/60)}ч ${arg - (Math.floor(arg/60) * 60)}м` : '' 
+      return arg > 60 ? `${Math.floor(arg/60)}ч ${arg - (Math.floor(arg/60) * 60)}м` : '';
     }
-
   },
   
-  mounted(){
-    if(Object.keys(this.store.$state.credits).length == 0 ||  Number(this.$route.params.id) !==  Number(this.store.credits.id) || this.store.$state.prodCompanies.length == 0){
-      this.getCredits()
-    }
-    if(Object.keys(this.store.$state.recommendations).length == 0 ||  Number(this.$route.params.id) !==  Number(this.store.credits.id)){
-      this.getRecommendations()
-    } 
-  }
 
 };
 
 </script>
 <template>
-  <div class="flex mx-auto px-12 gap-12">
+  <div class="flex mx-auto px-12 gap-12 max-w-[85%]">
     <img :src="imageLink + store.$state.details.poster_path" class="max-w-xs border-4 border-neutral-800 h-full" alt="">
     <div class="">
       <div class="text-3xl">Описание</div>
       <div class="mt-6 text-base">
         {{ store.$state.details?.overview }}
       </div>
-      <div class="mt-6 grid grid-cols-2 gap-6 max-w-[85%] justify-between">
+      <div class="mt-6 grid grid-cols-2 gap-6  justify-between">
         <div class="grid grid-cols-2 items-center">
           <div class="pt-3 text-sm">Дата выхода</div>
           <div class="pt-3 text-sm">{{ store.$state.details?.release_date }}</div>
@@ -138,10 +78,12 @@ export default {
             </div>
           </div>
           <div class="pt-3 text-sm">Язык</div>
-          <div 
-            v-for="item in store.$state.details.spoken_languages"
-            class="pt-3 text-sm">
-            {{ item.english_name }}
+          <div class="pt-3 text-sm">
+            <span 
+              v-for="(item,idx) in store.$state.details.spoken_languages"
+              >
+              {{ ((idx + 1) == store.$state.details.spoken_languages.length) ? item.english_name : item.english_name + ", "}}
+          </span>
           </div>
         </div>
       </div>
@@ -152,11 +94,5 @@ export default {
       :card-rating="0"
       :card-image="item.profile_path?.toString()" 
       :card-title="item.name?.toString()" />
-  </cPopular>
-  <cPopular popular-title="Похожие">
-    <cCard v-for="item in store.$state.recommendations.results" 
-      :card-rating="Number(item.vote_average.toPrecision(2))"
-      :card-image="item.poster_path?.toString()" 
-      :card-title="item.title?.toString()" />
   </cPopular>
 </template>

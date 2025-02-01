@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 
 import MovieDetails from '../interfaces/MovieDetails';
+import MovieVideo from "../interfaces/MovieVideo";
 import Credits from "../interfaces/Credits";
 import Recommendations from "../interfaces/Recommendations";
 
@@ -12,7 +13,8 @@ export const useStoreDetails = defineStore(('details'), {
       language : "ru-RU" as String,
       director: "" as String,
       prodCompanies: [] as String[],
-      recommendations: {} as Recommendations
+      recommendations: {} as Recommendations,
+      videos: {} as MovieVideo 
     }
   },
   actions : {
@@ -33,6 +35,9 @@ export const useStoreDetails = defineStore(('details'), {
     },
     setRecommendations(arg : Recommendations): void{
       this.recommendations = arg;
+    },
+    setVideos(arg : MovieVideo): void{
+      this.videos = arg;
     }
   }
 });

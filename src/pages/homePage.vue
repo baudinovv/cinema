@@ -88,21 +88,23 @@ export default defineComponent({
     :header-title="headliner.title"
     :header-reviews="(headliner.vote_count > 1000) ? `${headliner.vote_count / 1000}`.substring(0, 3) + 'K рецензий' : `${headliner.vote_count}`"
     :header-year="headliner.release_date.substring(0, 4)" header-duration="2ч 8м"
-    :header-img="headliner.backdrop_path" :header-desc="headliner.overview">
-    <cRating :star-rating="headliner.vote_average" />
+    :header-img="headliner.backdrop_path" 
+    :header-desc="headliner.overview">
+    <cRating 
+      :star-rating="Number(headliner.vote_average.toPrecision(2))" />
   </cHeader>
   <cPopular v-if="popularMovies" popular-title="Популярные фильмы">
     <cCard v-for="item in popularMovies"
       @click="$router.push(`/movie/${item.id}/overview`)" 
       :key="item.id" 
-      :card-rating="item.vote_average"
+      :card-rating="Number(item.vote_average.toPrecision(2))"
       :card-image="item.poster_path" 
       :card-title="item.title" />
   </cPopular>
   <cPopular v-if="popularTV" popular-title="Популярные сериалы">
     <cCard v-for="item in popularTV" 
       :key="item.id" 
-      :card-rating="item.vote_average"
+      :card-rating="Number(item.vote_average.toPrecision(2))"
       :card-image="item.poster_path" 
       :card-title="item.name" />
   </cPopular>
