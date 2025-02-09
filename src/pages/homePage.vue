@@ -28,7 +28,6 @@ export default defineComponent({
 
       // Установка состояния загрузки в false после получения данных
       this.loading = false;
-      console.log('Fetching!')
     } catch (error) {
       console.error("Ошибка при получении данных:", error);
     }

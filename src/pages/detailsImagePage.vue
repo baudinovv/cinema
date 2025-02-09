@@ -1,10 +1,20 @@
 <script lang="ts">
+import { useStoreDetails } from '../store/details';
+
 
 export default {
-  
+  name: "detailsImagePage",
+  data(){
+    return {
+      store: useStoreDetails()
+    }
+  }
+
 };
 
 </script>
 <template>
-  <div class="w-24 h-24 bg-yellow-600"></div>
+  <div class="">
+    d
+  </div>
 </template>
