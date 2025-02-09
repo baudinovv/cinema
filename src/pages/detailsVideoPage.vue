@@ -1,6 +1,7 @@
 <script lang="ts">
 
 import MovieVideo from '../interfaces/MovieVideo';
+import cModal from '../components/video/detailsVideoModal.vue'
 
 import { useStoreDetails } from '../store/details';
 
@@ -9,6 +10,18 @@ export default {
     return {
       store: useStoreDetails(),
       apiKey: import.meta.env.VITE_APP_API_KEY,
+      videoLinkKey: 0,
+      showModal: false
+    }
+  },
+
+  components: {
+    cModal
+  },
+
+  methods: {
+    rememberPos(arg: number){
+      this.videoArrayPos = arg;
     }
   },
     
@@ -25,20 +38,27 @@ export default {
     <div class="text-xl text-neutral-500"> {{ store.$state.videos.results?.length}} видео</div>
     <div class="pt-3">
       <div class="flex justify-between flex-wrap">
-        <div class="w-full max-w-72 cursor-pointer"
-          v-for="item in store.$state.videos.results" >
-          <div class="transition relative w-full overflow-hidden h-48 border-4 border-neutral-800 hover:scale-105">
-            <img
-              class="max-h-[412px] absolute -bottom-2/3 w-full"
-              :src="`https://movies-proxy.vercel.app/ipx/f_webp&s_400x600/youtube/vi/${item.key}/maxresdefault.jpg`" 
-              alt=""
-            >
+        <div class="w-full max-w-[30%] h-full cursor-pointer pt-4 ml-6 "
+          v-for="item in store.$state.videos.results" 
+          @click="showModal = true; videoLinkKey = item.key"
+        >
+          <div 
+            :style="`background-image: url('https://movies-proxy.vercel.app/ipx/f_webp&s_400x600/youtube/vi/${item.key}/maxresdefault.jpg'); background-size: 100%; background-repeat: no-repeat; background-position: center;`"
+            :class="`transition relative flex align-middle justify-center overflow-hidden h-[15vw] border-4 border-neutral-800 hover:scale-105`">
+            <svg class="text-white max-w-16 m-auto hover:text-[#2cff8b]" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path fill="currentColor" d="M18.4 12.5L9 18.38L8 19V6zm-1.9 0L9 7.8v9.4z"/></svg>
           </div>
           <div class="mt-3 text-lg">{{ item.name }}</div>
           <div class="mt-1 text-neutral-500 text-sm">{{ item.type }}</div>
         </div>
-        
       </div>
     </div>
   </div>
+  <cModal 
+    :show-modal="showModal"
+    @modalOff="showModal = false"
+   >
+      <iframe class="w-full h-full" allow="autoplay; encrypted-media" allowfullscreen 
+      :src="`https://www.youtube.com/embed/${videoLinkKey}?rel=0&amp;showinfo=0&amp;autoplay=0`" 
+      w-full m5 lg:m20 border-none></iframe>
+  </cModal>
 </template>

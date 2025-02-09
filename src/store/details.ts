@@ -12,7 +12,7 @@ export const useStoreDetails = defineStore(('details'), {
     return {
       details :  {} as MovieDetails,
       credits : {} as Credits,
-      language : "ru-RU" as String,
+      language : "en-US" as String,
       director: "" as String,
       prodCompanies: [] as String[],
       recommendations: {} as Recommendations,
