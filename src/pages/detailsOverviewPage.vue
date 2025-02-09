@@ -2,7 +2,7 @@
 
 import { useStoreDetails } from '../store/details.ts';
 
-import Credits from '../interfaces/Credits.ts';
+
 import cPopular from '../components/popular/popularSection.vue';
 import cCard from '../components/popular/popularCard.vue'
 

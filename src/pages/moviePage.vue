@@ -8,8 +8,6 @@ import cCard from '../components/popular/popularCard.vue'
 
 
 import MovieDetails from '../interfaces/MovieDetails.ts';
-import Credits from '../interfaces/Credits.ts';
-import Recommendations from '../interfaces/Recommendations.ts';
 import { useStoreDetails } from '../store/details.ts';
 
 
@@ -61,7 +59,7 @@ export default {
         :header-title="store.$state.details.title"
         :header-reviews="(store.$state.details.vote_count > 1000) ? `${store.$state.details.vote_count / 1000}`.substring(0, 3) + 'K рецензий' : `${store.$state.details.vote_count}`"
         :header-year="store.$state.details.release_date?.substring(0, 4)"
-        header-duration="2ч 8м"
+        :header-duration="String(store.$state.details.runtime)"
         :header-img="store.$state.details.backdrop_path"
         :header-desc="store.$state.details.overview">
         <cRating :star-rating="Number(store.$state.details.vote_average?.toPrecision(2))" />

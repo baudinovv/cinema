@@ -1,7 +1,6 @@
 <script lang="ts">
 
-import MovieVideo from '../interfaces/MovieVideo';
-import cModal from '../components/video/detailsVideoModal.vue'
+import cModal from '../components/details/detailsModal.vue'
 
 import { useStoreDetails } from '../store/details';
 
@@ -10,7 +9,7 @@ export default {
     return {
       store: useStoreDetails(),
       apiKey: import.meta.env.VITE_APP_API_KEY,
-      videoLinkKey: 0,
+      videoLinkKey: "" as String,
       showModal: false
     }
   },
@@ -19,11 +18,6 @@ export default {
     cModal
   },
 
-  methods: {
-    rememberPos(arg: number){
-      this.videoArrayPos = arg;
-    }
-  },
     
   mounted() {
     if(Object.keys(this.store.$state.videos).length == 0 ||  Number(this.$route.params.id) !==  Number(this.store.videos.id)){
