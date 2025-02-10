@@ -153,7 +153,7 @@ export const useStoreDetails = defineStore(('details'), {
     },
     async getImages(id: Number){
       const url =
-      `https://api.themoviedb.org/3/movie/${id}/images?language=${this.language}`;
+      `https://api.themoviedb.org/3/movie/${id}/images?language${this.language.substring(0, 2)}`;
       const options = {
         method: "GET",
         headers: {
@@ -164,9 +164,9 @@ export const useStoreDetails = defineStore(('details'), {
       };
       let responseMovie = await fetch(url, options);
       let result = responseMovie.json();
-      result.then((res: MovieVideo) => {
-        this.videos = res;
-        console.log("video: ",res);
+      result.then((res: MovieImages) => {
+        this.images = res;
+        console.log("images: ",res);
       }).catch((err: Error) => console.error(err));
     }
   }

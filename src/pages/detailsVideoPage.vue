@@ -51,8 +51,10 @@ export default {
     :show-modal="showModal"
     @modalOff="showModal = false"
    >
+   <div class="w-[90vw] h-[80vh] m-auto justify-center items-center bg-black justify-self-center relative z-50 px-9">
       <iframe class="w-full h-full" allow="autoplay; encrypted-media" allowfullscreen 
       :src="`https://www.youtube.com/embed/${videoLinkKey}?rel=0&amp;showinfo=0&amp;autoplay=0`" 
       w-full m5 lg:m20 border-none></iframe>
+    </div>
   </cModal>
 </template>

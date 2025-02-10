@@ -24,10 +24,7 @@ export default {
     >
       
     </div>
-    <div 
-      class="w-[90vw] h-[80vh] m-auto justify-center items-center bg-black justify-self-center relative z-50 px-9">
-      <slot></slot>
-    </div>
+    <slot></slot>
     <div class="fixed top-2 right-12 bg-white z-50 cursor-pointer">
       <div
         @click="$emit('modalOff')" 
