@@ -1,27 +1,27 @@
 <script lang="ts">
 
-import cHeader from '../components/header/headliner.vue';
-import cRating from '../components/header/rating.vue'
-import cDetails from '../components/details/detailsMenu.vue'
-import cPopular from '../components/popular/popularSection.vue';
-import cCard from '../components/popular/popularCard.vue'
+import cHeader from '../../components/header/headliner.vue';
+import cRating from '../../components/header/rating.vue'
+import cdetails from '../../components/details/detailsMenu.vue'
+import cPopular from '../../components/popular/popularSection.vue';
+import cCard from '../../components/popular/popularCard.vue'
 
+import MovieDetails from '../../interfaces/Movie/MovieDetails.ts';
 
-import MovieDetails from '../interfaces/MovieDetails.ts';
-import { useStoreDetails } from '../store/details.ts';
-
+import { useStoreDetails } from '../../store/details.ts';
+import { TVDetails } from '../../interfaces/TV/TVDetails.ts';
 
 export default {
   components : {
     cHeader,
     cRating,
-    cDetails,
+    cdetails,
     cCard,
     cPopular
   },
   data() {
     return {
-      headliner: null as MovieDetails | null,
+      headliner: null as TVDetails | null,
       apiKey: import.meta.env.VITE_APP_API_KEY,
       store: useStoreDetails(),
       loading: true
@@ -36,12 +36,12 @@ export default {
   
   async created() {
     try {
-      await this.store.getHeadliner(Number(this.$route.params.id));
+      await this.store.getHeadliner(Number(this.$route.params.id), 'tv');
       if(Object.keys(this.store.$state.recommendations).length == 0 ||  Number(this.$route.params.id) !==  Number(this.store.credits.id)){
-        await this.store.getRecommendations(Number(this.$route.params.id))
+        await this.store.getRecommendations(Number(this.$route.params.id), 'tv')
       }
       if(Object.keys(this.store.$state.credits).length == 0 ||  Number(this.$route.params.id) !==  Number(this.store.credits.id) || this.store.$state.prodCompanies.length == 0){
-        await this.store.getCredits(Number(this.$route.params.id)).then(() => this.store.getProdCompanies());
+        await this.store.getCredits(Number(this.$route.params.id), 'tv').then(() => this.store.getProdCompanies());
       } 
     } catch (error) {
       console.log(error)
@@ -56,15 +56,12 @@ export default {
   <div v-if="loading" > Загрузка... </div>
   <div v-else>
     <cHeader v-if="store.$state.details"
-        :header-title="store.$state.details.title"
-        :header-reviews="(store.$state.details.vote_count > 1000) ? `${store.$state.details.vote_count / 1000}`.substring(0, 3) + 'K рецензий' : `${store.$state.details.vote_count}`"
-        :header-year="store.$state.details.release_date?.substring(0, 4)"
-        :header-duration="String(store.$state.details.runtime)"
-        :header-img="store.$state.details.backdrop_path"
-        :header-desc="store.$state.details.overview">
+        :headliner="store.$state.details"
+        type="tv"
+      >
         <cRating :star-rating="Number(store.$state.details.vote_average?.toPrecision(2))" />
-      </cHeader>
-    <cDetails />
+    </cHeader>
+    <cdetails />
     <RouterView />
     <cPopular popular-title="Похожие">
       <cCard v-for="item in store.$state.recommendations.results" 

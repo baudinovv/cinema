@@ -25,6 +25,8 @@ export default defineComponent({
       // Запрос данных через store
       await this.store.getPopularMovies();
       await this.store.getTV();
+      await this.store.getHeadliner(this.store.$state.headlinerId, 'movie');
+
 
       // Установка состояния загрузки в false после получения данных
       this.loading = false;
@@ -38,13 +40,11 @@ export default defineComponent({
 <template>
   <div v-if="loading">Загрузка...</div>
   <div v-else>
-    <cHeader v-if="store.$state.headliner"
-      :header-title="store.$state.headliner.title"
-      :header-reviews="(store.$state.headliner.vote_count > 1000) ? `${store.$state.headliner.vote_count / 1000}`.substring(0, 3) + 'K рецензий' : `${store.$state.headliner.vote_count}`"
-      :header-year="store.$state.headliner.release_date?.substring(0, 4)"
-      header-duration="2ч 8м"
-      :header-img="store.$state.headliner.backdrop_path"
-      :header-desc="store.$state.headliner.overview">
+    <cHeader v-if="store.$state.details"
+      type="movie" 
+      :headliner="store.$state.details"  
+    >
+
       <cRating :star-rating="Number(store.$state.headliner.vote_average?.toPrecision(2))" />
     </cHeader>
 
@@ -62,6 +62,7 @@ export default defineComponent({
     <!-- Популярные сериалы -->
     <cPopular popular-title="Популярные сериалы" v-if="store.$state.popularTV">
       <cCard v-for="item in store.$state.popularTV" 
+        @click="$router.push(`/tv/${item.id}/overview`)"
         :key="item.id"
         :card-rating="Number(item.vote_average?.toPrecision(2))"
         :card-image="item.poster_path"

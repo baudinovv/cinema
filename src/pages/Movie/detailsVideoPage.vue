@@ -1,8 +1,8 @@
 <script lang="ts">
 
-import cModal from '../components/details/detailsModal.vue'
+import cModal from '../../components/details/detailsModal.vue'
 
-import { useStoreDetails } from '../store/details';
+import { useStoreDetails } from '../../store/details';
 
 export default {
   data(){
@@ -21,7 +21,7 @@ export default {
     
   mounted() {
     if(Object.keys(this.store.$state.videos).length == 0 ||  Number(this.$route.params.id) !==  Number(this.store.videos.id)){
-      this.store.getVideos(Number(this.$route.params.id));
+      this.store.getVideos(Number(this.$route.params.id), 'movie');
     }
   }
 };

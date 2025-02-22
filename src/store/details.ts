@@ -1,17 +1,19 @@
 import { defineStore } from "pinia";
 
-import MovieDetails from '../interfaces/MovieDetails';
-import MovieVideo from "../interfaces/MovieVideo";
-import Credits from "../interfaces/Credits";
-import Recommendations from "../interfaces/Recommendations";
-import Movie from "../interfaces/Movie";
-import TV from "../interfaces/TV";
-import { MovieImages } from "../interfaces/MovieImages";
+import MovieDetails from '../interfaces/Movie/MovieDetails';
+import MovieVideo from "../interfaces/Movie/MovieVideo";
+import Credits from "../interfaces/Movie/Credits";
+import Recommendations from "../interfaces/Movie/Recommendations";
+import Movie from "../interfaces/Movie/Movie";
+import TV from "../interfaces/TV/TV";
+import { MovieImages } from "../interfaces/Movie/MovieImages";
+import { TVDetails } from "../interfaces/TV/TVDetails";
+import { TVImages } from "../interfaces/TV/TVImages";
 
 export const useStoreDetails = defineStore(('details'), {
   state: () => {
     return {
-      details :  {} as MovieDetails,
+      details :  {} as MovieDetails | TVDetails,
       credits : {} as Credits,
       language : "en-US" as String,
       director: "" as String,
@@ -19,10 +21,11 @@ export const useStoreDetails = defineStore(('details'), {
       recommendations: {} as Recommendations,
       videos: {} as MovieVideo,
       apiKey: import.meta.env.VITE_APP_API_KEY,
-      headliner: {} as Movie,
+      headliner: {} as Movie | TV,
       popularMovies: {} as Movie[],
       popularTV: {} as TV[],
-      images: {} as MovieImages
+      images: {} as MovieImages,
+      headlinerId: 0 as Number
     }
   },
   actions : {
@@ -42,8 +45,9 @@ export const useStoreDetails = defineStore(('details'), {
       result.then((res: any) => {
         this.headliner = res.results[0];
         this.popularMovies = res.results;
-        console.log("headliner: ",res)
-        console.log("popularMovies: ", res);
+        this.headlinerId = res.results[0].id
+        console.log("headliner on homepage: ", this.headliner)
+        console.log("popularMovies: ", this.popularMovies);
       }).catch((err: Error) => console.error(err));
     },
 
@@ -53,7 +57,7 @@ export const useStoreDetails = defineStore(('details'), {
         method: 'GET',
         headers: {
           accept: 'application/json',
-          Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIyMjAyNWE1YTk0MjAzYjE3NDFmNjU4ZmJmZGJjYTBiZCIsIm5iZiI6MTcyNTYyNTQ0OS4yMjUsInN1YiI6IjY2ZGFmNDY5N2VjOTkzNWRhNzcwNDEwMSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.xI5ygeAzdXqKb0H__kau5a6xJNVtkdHC8axMm04ZMa4'
+          Authorization: `Bearer ${this.apiKey}`
         }
       };
 
@@ -65,9 +69,9 @@ export const useStoreDetails = defineStore(('details'), {
       }).catch((err: Error) => console.error(err));
     },
 
-    async getHeadliner(id: Number | string) {
+    async getHeadliner(id: Number | string, type: string) {
       const url =
-      `https://api.themoviedb.org/3/movie/${id}?language=${this.language}`;
+      `https://api.themoviedb.org/3/${type}/${id}?language=${this.language}`;
       const options = {
         method: "GET",
         headers: {
@@ -79,13 +83,13 @@ export const useStoreDetails = defineStore(('details'), {
       let responseMovie = await fetch(url, options);
       let result = responseMovie.json();
       result.then((res: any) => {
-        console.log("headliner :", res); //debug
+        console.log("details :", res); //debug
         this.details = res; // set into pinia's store
       }).catch((err: Error) => console.error(err));
     },
-    async getRecommendations(id : Number | string) {
+    async getRecommendations(id : Number | string, type: string) {
       const url =
-      `https://api.themoviedb.org/3/movie/${id}/recommendations?language=${this.language}&page=1`;
+      `https://api.themoviedb.org/3/${type}/${id}/recommendations?language=${this.language}&page=1`;
       const options = {
         method: "GET",
         headers: {
@@ -98,12 +102,12 @@ export const useStoreDetails = defineStore(('details'), {
       let result = responseMovie.json();
       result.then((res: Recommendations) => {
         this.recommendations = res;
-        console.log(res);
+        console.log("recom: ", res);
       }).catch((err: Error) => console.error(err));
     },
-    async getCredits(id : Number | string) {
+    async getCredits(id : Number | string, type: string) {
       const url =
-      `https://api.themoviedb.org/3/movie/${id}/credits?language=${this.language}`;
+      `https://api.themoviedb.org/3/${type}/${id}/credits?language=${this.language}`;
       const options = {
         method: "GET",
         headers: {
@@ -115,8 +119,8 @@ export const useStoreDetails = defineStore(('details'), {
       let responseMovie = await fetch(url, options);
       let result = responseMovie.json();
       result.then((res: Credits) => {
+        console.log("credits: ", res);
         this.credits = res;
-        console.log(res);
         for(let item of res.crew){
           if(item.job == "Director"){
             this.director = item.name;
@@ -133,9 +137,9 @@ export const useStoreDetails = defineStore(('details'), {
         }
       } 
     },
-    async getVideos(id : Number) {
+    async getVideos(id : Number, type: string) {
       const url =
-      `https://api.themoviedb.org/3/movie/${id}/videos?language=${this.language}`;
+      `https://api.themoviedb.org/3/${type}/${id}/videos?language=${this.language}`;
       const options = {
         method: "GET",
         headers: {
@@ -151,9 +155,9 @@ export const useStoreDetails = defineStore(('details'), {
         console.log("video: ",res);
       }).catch((err: Error) => console.error(err));
     },
-    async getImages(id: Number){
+    async getImages(id: Number, type : string){
       const url =
-      `https://api.themoviedb.org/3/movie/${id}/images?language${this.language.substring(0, 2)}`;
+      `https://api.themoviedb.org/3/${type}/${id}/images?language${this.language.substring(0, 2)}`;
       const options = {
         method: "GET",
         headers: {
@@ -164,7 +168,7 @@ export const useStoreDetails = defineStore(('details'), {
       };
       let responseMovie = await fetch(url, options);
       let result = responseMovie.json();
-      result.then((res: MovieImages) => {
+      result.then((res: MovieImages | TVImages) => {
         this.images = res;
         console.log("images: ",res);
       }).catch((err: Error) => console.error(err));
