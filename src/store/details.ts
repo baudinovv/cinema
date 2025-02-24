@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import MovieDetails from '../interfaces/Movie/MovieDetails';
 import MovieVideo from "../interfaces/Movie/MovieVideo";
 import Credits from "../interfaces/Movie/Credits";
-import Recommendations from "../interfaces/Movie/Recommendations";
+import { Recommendations } from "../interfaces/Movie/Recommendations";
 import Movie from "../interfaces/Movie/Movie";
 import TV from "../interfaces/TV/TV";
 import { MovieImages } from "../interfaces/Movie/MovieImages";

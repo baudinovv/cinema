@@ -1,8 +1,9 @@
 import Movie from './Movie';
+import TV from '../TV/TV';
 
-export default interface Recommendations {
+export interface Recommendations {
   page: Number;
-  results: Movie[]
+  results: Movie[] & TV[];
   total_pages: Number;
   total_results: Number;
 }

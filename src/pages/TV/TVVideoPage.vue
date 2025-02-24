@@ -21,7 +21,7 @@ export default {
     
   mounted() {
     if(Object.keys(this.store.$state.videos).length == 0 ||  Number(this.$route.params.id) !==  Number(this.store.videos.id)){
-      this.store.getVideos(Number(this.$route.params.id), 'movie');
+      this.store.getVideos(Number(this.$route.params.id), 'tv');
     }
   }
 };

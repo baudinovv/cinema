@@ -2,11 +2,10 @@
 
 import cHeader from '../../components/header/headliner.vue';
 import cRating from '../../components/header/rating.vue'
-import cdetails from '../../components/details/detailsMenu.vue'
+import cDetailsMenu from '../../components/details/detailsMenu.vue'
 import cPopular from '../../components/popular/popularSection.vue';
 import cCard from '../../components/popular/popularCard.vue'
 
-import MovieDetails from '../../interfaces/Movie/MovieDetails.ts';
 
 import { useStoreDetails } from '../../store/details.ts';
 import { TVDetails } from '../../interfaces/TV/TVDetails.ts';
@@ -15,7 +14,7 @@ export default {
   components : {
     cHeader,
     cRating,
-    cdetails,
+    cDetailsMenu,
     cCard,
     cPopular
   },
@@ -61,14 +60,14 @@ export default {
       >
         <cRating :star-rating="Number(store.$state.details.vote_average?.toPrecision(2))" />
     </cHeader>
-    <cdetails />
+    <cDetailsMenu type="tv" />
     <RouterView />
     <cPopular popular-title="Похожие">
       <cCard v-for="item in store.$state.recommendations.results" 
-        @click="$router.push(`/`).then(() => $router.push(`/movie/${item.id}/overview`))" 
+        @click="$router.push(`/`).then(() => $router.push(`/tv/${item.id}/overview`))" 
         :card-rating="Number(item.vote_average.toPrecision(2))"
         :card-image="item.poster_path?.toString()" 
-        :card-title="item.title?.toString()" />
+        :card-title="item.title?.toString() || item.name?.toString()" />
     </cPopular>
   </div>
 

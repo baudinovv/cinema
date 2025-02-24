@@ -8,6 +8,7 @@ import detailsVideoPage from '../pages/Movie/detailsVideoPage.vue';
 import TVImagePage from '../pages/TV/TVImagePage.vue';
 import TVOverviewPage from '../pages/TV/TVOverviewPage.vue';
 import TVPage from '../pages/TV/TVPage.vue';
+import TVvideoPage from '../pages/TV/TVVideoPage.vue';
 
 const routes = [
   { path: '/', component: home },
@@ -19,7 +20,7 @@ const routes = [
   { path: '/tv/:id/', component: TVPage, children: [
     { path: 'overview', component: TVOverviewPage },
     { path: 'image', component: TVImagePage },
-    { path: 'video', component: detailsVideoPage }
+    { path: 'video', component: TVvideoPage }
   ] },
 ]
 

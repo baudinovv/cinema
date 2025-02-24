@@ -45,15 +45,15 @@ export default {
       <div class="mt-6 grid grid-cols-2 gap-6  justify-between">
         <div class="grid grid-cols-2 items-center">
           <div class="pt-3 text-sm">Дата выхода</div>
-          <div class="pt-3 text-sm">{{ details?.release_date }}</div>
-          <div class="pt-3 text-sm">Режиссёр</div>
-          <div class="pt-3 text-xs flex gap-3">
+          <div class="pt-3 text-sm">{{ details.release_date || details.first_air_date }}</div>
+          <div v-if="director" class="pt-3 text-sm">Режиссёр</div>
+          <div v-if="director" class="pt-3 text-xs flex gap-3">
             <div class="px-2 py-2 bg-neutral-700 rounded-lg box-content">
               {{ director }}
             </div>
           </div>
-          <div class="pt-3 text-sm">Сборы</div>
-          <div class="pt-3 text-sm">${{ details?.revenue }}</div>
+          <div v-if="details?.revenue" class="pt-3 text-sm">Сборы</div>
+          <div v-if="details?.revenue" class="pt-3 text-sm">${{ details?.revenue }}</div>
           <div class="pt-3 text-sm">Статус</div>
           <div class="pt-3 text-sm">{{ details?.status }}</div>
           <div class="pt-3 text-sm">Кинокомпания</div>
@@ -66,12 +66,12 @@ export default {
           </div>
         </div>
         <div class="grid grid-cols-2 items-center">
-          <div class="pt-3 text-sm">Продолжительность</div>
-          <div class="pt-3 text-sm">
+          <div v-if="details.runtime" class="pt-3 text-sm">Продолжительность</div>
+          <div v-if="details.runtime" class="pt-3 text-sm">
             {{ parseRuntime(details.runtime) }}
           </div>
-          <div class="pt-3 text-sm">Бюджет</div>
-          <div class="pt-3 text-sm">
+          <div v-if="details.budget" class="pt-3 text-sm">Бюджет</div>
+          <div v-if="details.budget" class="pt-3 text-sm">
             ${{ details.budget }}
           </div>
           <div class="pt-3 text-sm">Жанр</div>

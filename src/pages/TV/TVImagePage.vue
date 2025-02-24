@@ -22,7 +22,7 @@ export default {
       (this.imageIndex == this.store.$state.images.backdrops.length) ? this.imageIndex : this.imageIndex++;
     },
     prevImage(){
-      (this.imageIndex == 1) ? this.imageIndex : this.imageIndex--;
+      (this.imageIndex + 1 == 1) ? this.imageIndex : this.imageIndex--;
     }
   },
 
@@ -62,8 +62,8 @@ export default {
       tabindex="0" 
       @keyup.left="prevImage"
       @keyup.right="nextImage" 
-      :src="store.$state.images.backdrops[imageIndex] + imageSrc + store.$state.images.backdrops[imageIndex].file_path" alt=""
+      :src="imageSrc + store.$state.images.backdrops[imageIndex].file_path" alt=""
     >
-    <div class="fixed bottom-5 left-5 z-50"><span class="bold"> {{ imageIndex }} </span> / {{ store.$state.images.backdrops.length }}</div>
+    <div class="fixed bottom-5 left-5 z-50"><span class="bold"> {{ imageIndex + 1 }} </span> / {{ store.$state.images.backdrops.length }}</div>
   </cModal> 
 </template>

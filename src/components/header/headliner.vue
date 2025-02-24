@@ -30,7 +30,7 @@ export default{
       <ol class="flex list-disc gap-6 text-gray-400">
         <li class="flex"> <slot></slot> </li>
         <li v-if="headliner?.vote_count" class="">{{ (headliner?.vote_count > 1000) ? `${headliner?.vote_count / 1000}`.substring(0, 3) + 'K рецензий' : `${headliner?.vote_count} рецензий` }}</li>
-        <li v-if="headliner?.release_date | headliner?.first_air_date" class="">{{ (type === 'movie') ? headliner.release_date?.substring(0,4) : headliner?.first_air_date }}</li>
+        <li v-if="headliner.release_date?.substring(0,4) || headliner.first_air_date?.substring(0,4)" class="">{{ (type === 'movie') ? headliner.release_date?.substring(0,4) : headliner?.first_air_date }}</li>
         <li v-if="headliner?.runtime" class="">{{ parseRuntime(headliner?.runtime) }}</li>
       </ol>
       <div class="">{{ headliner?.overview }}</div>
